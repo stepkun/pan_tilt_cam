@@ -1,2 +1,2 @@
-# pan-tilt-cam
-ros2 node for the waveshare pan-tilt HAT with camera
+# pan_tilt_cam
+ros2 node for the WaveShare Pan-Tilt HAT with camera

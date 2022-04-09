@@ -1,0 +1,25 @@
+#!/usr/bin/python
+import time
+import RPi.GPIO as GPIO
+
+from . PCA9685 import PCA9685
+
+def main(args=None):
+    try:
+        print ("Holding Initial Pos pan=center, tilt=center")
+        pwm = PCA9685()
+        pwm.setPWMFreq(50)
+        #pwm.setServoPulse(1,500) 
+
+        while True:
+            pwm.setRotationAngle(0, 90)
+            pwm.setRotationAngle(1, 90)
+
+    except:
+        pwm.exit_PCA9685()
+        print("\nInitial pos finished")
+        exit()
+
+
+if __name__ == '__main__':
+    main()
