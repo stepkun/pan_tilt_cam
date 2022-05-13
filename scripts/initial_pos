@@ -1,8 +1,8 @@
-#!/usr/bin/python
+#!/usr/bin/env python3
 import time
 import RPi.GPIO as GPIO
 
-from . PCA9685 import PCA9685
+from pan_tilt_cam.PCA9685 import PCA9685
 
 def main(args=None):
     try:
