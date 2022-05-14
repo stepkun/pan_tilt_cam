@@ -30,7 +30,7 @@ def main(args=None):
             pwm.setRotationAngle(1, 90)
             time.sleep(1)
 
-            for i in range(140,30,-1): 
+            for i in range(130,30,-1): 
                 pwm.setRotationAngle(0, i)
                 time.sleep(0.1)
     
