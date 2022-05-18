@@ -43,7 +43,7 @@ ament_python_install_package(pan_tilt_cam)
 
 # Install Python executables as scripts
 install(PROGRAMS
-  scripts/test scripts/initial_pos
+  scripts/test scripts/initial_pos scripts/control_py
   DESTINATION lib/${PROJECT_NAME}
 )
 
