@@ -7,6 +7,11 @@ from rclpy.node import Node
 
 from geometry_msgs.msg import Quaternion
 
+import RPi.GPIO as GPIO
+from pan_tilt_cam.PCA9685 import PCA9685
+
+yaw_scale = 180/math.pi
+pitch_scale = 180/math.pi
 
 class PanTiltCam(Node):
     '''
@@ -23,6 +28,23 @@ class PanTiltCam(Node):
             10)
 
         self.subscription  # prevent unused variable warning
+        try:
+            self.pwm = PCA9685()
+            self.pwm.setPWMFreq(50)
+            #self.pwm.setServoPulse(1,500)
+            self.center = 87.5
+            self.horizontal = 95
+            self.pwm.setRotationAngle(0, self.horizontal)
+            self.pwm.setRotationAngle(1, self.center)
+            self.left_pan = 150
+            self.right_pan = 25
+            self.down_tilt = 125
+            self.up_tilt = 30
+        
+        except:
+            pwm.exit_PCA9685()
+            self.get_logger().error('Could not initialize PanTiltHAT')
+
 
 
     def cmd_cam_listener_callback(self, msg):
@@ -45,7 +67,15 @@ class PanTiltCam(Node):
         siny_cosp = 2 * (msg.w * msg.z + msg.x * msg.y)
         cosy_cosp = 1 - 2 * (msg.y * msg.y + msg.z * msg.z)
         yaw = math.atan2(siny_cosp, cosy_cosp)
-        print(roll, pitch, yaw)
+        pan = self.center - yaw_scale * yaw     # servo is upside down
+        tilt = self.horizontal + pitch_scale * pitch
+        # clamp pan and tilt
+        pan = min(pan, self.left_pan)
+        pan = max(pan, self.right_pan)
+        tilt = min(tilt, self.down_tilt)
+        tilt = max(tilt, self.up_tilt)
+        self.pwm.setRotationAngle(0, tilt)
+        self.pwm.setRotationAngle(1, pan)
 
 
 def main(args=None):
